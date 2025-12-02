@@ -1,0 +1,50 @@
+import java.util.*;
+
+public class Evaluate {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        System.out.print("Enter an expression: ");
+        String input = scan.nextLine();
+
+        String[] tokens = input.split("\\s+");
+
+        Stack<String> ops = new Stack<>();
+        Stack<Double> vals = new Stack<>();
+
+        for (String token : tokens) {
+
+            if (token.equals("(")) {
+                // do nothing
+            }
+            else if (token.equals("+") || token.equals("-") ||
+                     token.equals("*") || token.equals("/") ||
+                     token.equals("sqrt")) {
+                ops.push(token);
+            }
+            else if (token.equals(")")) {
+                // pop operator
+                String op = ops.pop();
+                double v = vals.pop();
+
+                if (op.equals("sqrt")) {
+                    v = Math.sqrt(v);
+                } else {
+                    double v2 = vals.pop();
+                    if (op.equals("+")) v = v2 + v;
+                    else if (op.equals("-")) v = v2 - v;
+                    else if (op.equals("*")) v = v2 * v;
+                    else if (op.equals("/")) v = v2 / v;
+                }
+
+                vals.push(v);
+            }
+            else {
+                // number
+                vals.push(Double.parseDouble(token));
+            }
+        }
+
+        System.out.println(vals.pop());
+    }
+}
